@@ -78,7 +78,7 @@ const Login = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="bg-mui-blue">
         <div className="flex flex-col items-center justify-center h-dvh">
           <div className="flex flex-col items-center justify-center bg-white rounded-lg p-7 gap-5">
-            <h1 className="text-xl font-bold	">Giriş Yap</h1>
+            <h1 className="text-xl font-bold">Giriş Yap</h1>
             <Controller
               name="usernameOrEmail"
               control={control}

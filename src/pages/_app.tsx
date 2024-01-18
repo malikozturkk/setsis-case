@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import Head from "next/head";
 import "@/styles/globals.css";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient();
@@ -33,7 +34,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <QueryClientProvider client={queryClient}>
         <Header />
         <Component {...pageProps} />
-        <div>footer</div>
+        <Footer />
       </QueryClientProvider>
     </>
   );

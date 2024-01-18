@@ -61,7 +61,6 @@ const Register = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const [show, setShow] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const url = process.env.NEXT_PUBLIC_SETSIS_API_URL;
 
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -130,7 +129,7 @@ const Register = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="bg-mui-blue">
         <div className="flex flex-col items-center justify-center h-dvh">
           <div className="flex flex-col items-center justify-center bg-white rounded-lg p-7 gap-5">
-            <h1 className="text-xl font-bold	">Üye Ol</h1>
+            <h1 className="text-xl font-bold">Üye Ol</h1>
             <Controller
               name="username"
               control={control}
