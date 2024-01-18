@@ -9,6 +9,9 @@ import {
   InputLabel,
   InputAdornment,
   FormControl,
+  Button,
+  Grid,
+  Container,
 } from "@mui/material/";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
@@ -163,6 +166,16 @@ const Login = () => {
             >
               Giriş Yap
             </LoadingButton>
+            <Container className="p-0 flex justify-between">
+              <Grid item xs={12} sm={6} md={6}>
+                <Button href="/register" variant="outlined">
+                  Üye Ol
+                </Button>
+              </Grid>
+              <Grid item xs={12} sm={6} md={6}>
+                <Button variant="outlined">Şifremi Unuttum</Button>
+              </Grid>
+            </Container>
           </div>
         </div>
       </form>

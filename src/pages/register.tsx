@@ -33,6 +33,7 @@ import {
   InputLabel,
   InputAdornment,
   FormControl,
+  Button,
 } from "@mui/material/";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
@@ -284,6 +285,9 @@ const Register = () => {
             >
               Üye Ol
             </LoadingButton>
+            <Button variant="outlined" fullWidth href="/login">
+              Üyeliğin varsa, giriş yap
+            </Button>
           </div>
         </div>
       </form>
