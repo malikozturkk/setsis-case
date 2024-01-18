@@ -10,7 +10,7 @@ interface CustomDialogProps {
   open: boolean;
   onClose?(): void;
   title?: string;
-  message?: string;
+  message?: string | React.ReactNode;
 }
 
 const CustomDialog: React.FC<CustomDialogProps> = ({

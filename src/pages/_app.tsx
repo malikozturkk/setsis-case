@@ -2,6 +2,8 @@ import { AppProps } from "next/app";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Head from "next/head";
 import "@/styles/globals.css";
+import { Provider } from "react-redux";
+import store from "@/store";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -15,9 +17,9 @@ function MyApp({ Component, pageProps }: AppProps) {
           name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=0, maximum-scale=1, minimum-scale=1, user-scalable=0"
         />
-        <link rel="icon" type="image/x-icon" href="/icon.png" />
-        <link rel="apple-touch-icon" href="/icon.png" />
-        <link rel="shortcut icon" href="/icon.png" type="image/x-icon" />
+        <link rel="icon" type="image/x-icon" href="/setsis-icon.png" />
+        <link rel="apple-touch-icon" href="/setsis-icon.png" />
+        <link rel="shortcut icon" href="/setsis-icon.png" type="image/x-icon" />
         <title>Setsis Bilişim</title>
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Setsis Bilişim" />
@@ -31,11 +33,13 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="publisher" content="Setsis" />
         <meta name="category" content="IT" />
       </Head>
-      <QueryClientProvider client={queryClient}>
-        <Header />
-        <Component {...pageProps} />
-        <Footer />
-      </QueryClientProvider>
+      <Provider store={store}>
+        <QueryClientProvider client={queryClient}>
+          <Header />
+          <Component {...pageProps} />
+          <Footer />
+        </QueryClientProvider>
+      </Provider>
     </>
   );
 }

@@ -304,8 +304,11 @@ const Register = () => {
         open={show}
         onClose={() => setShow(false)}
         title="Üye Olurken Hata Oluştu"
-        message="Çözemeyeceğimiz bir sorun değil, lütfen tekrar deneyin. Tekrar hata
-        alırsanız 0555 555 55 55 numaralı hattı arayın."
+        message={
+          <div
+            dangerouslySetInnerHTML={{ __html: handleRegister.data?.message }}
+          />
+        }
       />
     </>
   );
