@@ -14,6 +14,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const Login = () => {
   const [showPassword, setShowPassword] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (
@@ -43,10 +44,17 @@ const Login = () => {
 
   const onSubmit = async (data: any) => {
     if (data.usernameOrEmail !== "" && data.password !== "") {
-      return await API.post("http://lisans.setsis.com:1468/api/Auth/Login", {
-        usernameOrEmail: data.usernameOrEmail,
-        password: data.password,
-      });
+      setLoading(true);
+      try {
+        setLoading(false);
+        return await API.post("http://lisans.setsis.com:1468/api/Auth/Login", {
+          usernameOrEmail: data.usernameOrEmail,
+          password: data.password,
+        });
+      } catch (error) {
+        setLoading(false);
+        console.log(error);
+      }
     }
   };
 
@@ -131,7 +139,7 @@ const Login = () => {
             className="bg-mui-blue"
             size="large"
             type="submit"
-            loading={false}
+            loading={loading}
             variant="contained"
             fullWidth
           >
