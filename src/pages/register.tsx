@@ -40,7 +40,6 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import ErrorText from "@/components/ErrorText";
 import CustomDialog from "@/components/CustomDialog";
 
-const url = process.env.NEXT_PUBLIC_SETSIS_API_URL;
 const AuthRegister = async (
   username: string,
   firstname: string,
@@ -48,7 +47,7 @@ const AuthRegister = async (
   email: string,
   password: string
 ) => {
-  const response = await API.post(`${url}/User`, {
+  const response = await API.post(`http://lisans.setsis.com:1468/api/User`, {
     username,
     firstname,
     lastname,
@@ -61,6 +60,7 @@ const AuthRegister = async (
 const Register = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const [show, setShow] = React.useState(false);
+  const [success, setSuccess] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (
@@ -102,8 +102,8 @@ const Register = () => {
       ),
     {
       onSuccess: (response) => {
-        if (response.successed) {
-          console.log(response, "response");
+        if (response.succeeded) {
+          setSuccess(response.succeeded);
         } else {
           setShow(true);
         }
@@ -292,9 +292,20 @@ const Register = () => {
         </div>
       </form>
       <CustomDialog
+        open={success}
+        onClose={() => {
+          setSuccess(false);
+          window.location.pathname = "/login";
+        }}
+        title="Başarıyla Üye Olundu"
+        message="Giriş Sayfasına Yönlendiriliyorsunuz"
+      />
+      <CustomDialog
         open={show}
         onClose={() => setShow(false)}
         title="Üye Olurken Hata Oluştu"
+        message="Çözemeyeceğimiz bir sorun değil, lütfen tekrar deneyin. Tekrar hata
+        alırsanız 0555 555 55 55 numaralı hattı arayın."
       />
     </>
   );

@@ -10,12 +10,14 @@ interface CustomDialogProps {
   open: boolean;
   onClose?(): void;
   title?: string;
+  message?: string;
 }
 
 const CustomDialog: React.FC<CustomDialogProps> = ({
   open,
   title,
   onClose,
+  message,
 }) => {
   const handleCloseCallback = React.useCallback(() => {
     //@ts-ignore
@@ -32,8 +34,7 @@ const CustomDialog: React.FC<CustomDialogProps> = ({
         <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Çözemeyeceğimiz bir sorun değil, lütfen tekrar deneyin. Tekrar hata
-            alırsanız 0555 555 55 55 numaralı hattı arayın.
+            {message}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

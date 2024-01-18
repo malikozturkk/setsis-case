@@ -2,6 +2,7 @@ import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import { API } from "../services/index";
 import { useMutation } from "react-query";
+import Cookies from "js-cookie";
 import {
   TextField,
   IconButton,
@@ -11,25 +12,27 @@ import {
   FormControl,
   Button,
   Grid,
-  Container,
 } from "@mui/material/";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import ErrorText from "@/components/ErrorText";
 import CustomDialog from "@/components/CustomDialog";
 
-const url = process.env.NEXT_PUBLIC_SETSIS_API_URL;
 const AuthLogin = async (usernameOrEmail: string, password: string) => {
-  const response = await API.post(`${url}/Auth/Login`, {
-    usernameOrEmail,
-    password,
-  });
+  const response = await API.post(
+    `http://lisans.setsis.com:1468/api/Auth/Login`,
+    {
+      usernameOrEmail,
+      password,
+    }
+  );
   return response;
 };
 
 const Login = () => {
   const [showPassword, setShowPassword] = React.useState(false);
-  const [show, setShow] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const [success, setSuccess] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (
@@ -56,14 +59,21 @@ const Login = () => {
       AuthLogin(data.usernameOrEmail, data.password),
     {
       onSuccess: (response) => {
-        if (response.successed) {
-          console.log(response, "response");
+        if (response.token) {
+          const expireDate = new Date(response.token.expiration);
+          Cookies.set("accessToken", response.token.accessToken, {
+            expires: expireDate,
+          });
+          Cookies.set("refreshToken", response.token.refreshToken, {
+            expires: expireDate,
+          });
+          setSuccess(true);
         } else {
-          setShow(true);
+          setError(true);
         }
       },
       onError: (error) => {
-        setShow(true);
+        setError(true);
         console.error("Login Error:", error);
       },
     }
@@ -180,9 +190,20 @@ const Login = () => {
         </div>
       </form>
       <CustomDialog
-        open={show}
-        onClose={() => setShow(false)}
+        open={success}
+        onClose={() => {
+          setSuccess(false);
+          window.location.pathname = "/";
+        }}
+        title="Başarıyla Giriş Yapıldı"
+        message="Ana sayfaya yönlendiriliyorsunuz."
+      />
+      <CustomDialog
+        open={error}
+        onClose={() => setError(false)}
         title="Giriş Yapılırken Hata Oluştu"
+        message="Kullanıcı adı veya şifre yanlış, lütfen tekrar deneyin. Tekrar hata
+        alırsanız 0555 555 55 55 numaralı hattı arayın."
       />
     </>
   );
