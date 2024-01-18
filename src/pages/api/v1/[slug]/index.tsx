@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { AuthLogin } from "@/services";
+import { AuthLogin, AuthRegister } from "@/services";
 
 interface ApiConfig {
   method: "POST" | "GET";
@@ -8,6 +8,7 @@ interface ApiConfig {
 
 const API_MAPS: Record<string, ApiConfig> = {
   "auth-login": { service: AuthLogin, method: "POST" },
+  "auth-register": { service: AuthRegister, method: "POST" },
 };
 
 export default async function handler(
