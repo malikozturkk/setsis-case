@@ -20,9 +20,9 @@ export const API = CoreAPI();
 
 export const AuthLogin = async (params: any) => {
   const { usernameOrEmail, password } = params;
-  return await API.post(`"Auth/Login"`, { usernameOrEmail, password });
+  return await API.post("/Auth/Login", { usernameOrEmail, password });
 };
 
 export const AuthRegister = async (params: any) => {
-  return await API.post(`"/User"`, params);
+  return await API.post("/User", params);
 };

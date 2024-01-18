@@ -47,7 +47,7 @@ const AuthRegister = async (
   email: string,
   password: string
 ) => {
-  const response = await API.post(`http://lisans.setsis.com:1468/api/User`, {
+  const response = await API.post("/api/v1/auth-register", {
     username,
     firstname,
     lastname,

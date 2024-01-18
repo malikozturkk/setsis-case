@@ -19,13 +19,10 @@ import ErrorText from "@/components/ErrorText";
 import CustomDialog from "@/components/CustomDialog";
 
 const AuthLogin = async (usernameOrEmail: string, password: string) => {
-  const response = await API.post(
-    `http://lisans.setsis.com:1468/api/Auth/Login`,
-    {
-      usernameOrEmail,
-      password,
-    }
-  );
+  const response = await API.post("/api/v1/auth-login", {
+    usernameOrEmail,
+    password,
+  });
   return response;
 };
 

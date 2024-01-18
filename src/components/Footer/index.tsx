@@ -70,7 +70,7 @@ const Footer: React.FC = () => {
           </Grid>
           <Grid item xs={6} sm={3} md={2}>
             <Typography variant="subtitle1" color="inherit" gutterBottom>
-              ÜYELİK
+              ÜYELİK İŞLEMLERİ
             </Typography>
             {user ? (
               <IconButton className="p-0">
