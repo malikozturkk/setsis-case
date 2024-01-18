@@ -166,7 +166,7 @@ const Login = () => {
             >
               Giriş Yap
             </LoadingButton>
-            <Container className="p-0 flex justify-between">
+            <Container className="flex p-0 justify-between">
               <Grid item xs={12} sm={6} md={6}>
                 <Button href="/register" variant="outlined">
                   Üye Ol
