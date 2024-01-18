@@ -16,6 +16,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const url = process.env.NEXT_PUBLIC_SETSIS_API_URL;
 
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -47,7 +48,7 @@ const Login = () => {
       setLoading(true);
       try {
         setLoading(false);
-        return await API.post("http://lisans.setsis.com:1468/api/Auth/Login", {
+        return await API.post(`${url}/Auth/Login`, {
           usernameOrEmail: data.usernameOrEmail,
           password: data.password,
         });
