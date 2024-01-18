@@ -16,4 +16,4 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-Live : https://setsis-case-9zj98wcnj-malikozturkk.vercel.app/
+Live : https://setsis-case.vercel.app/
