@@ -166,7 +166,7 @@ const Login = () => {
             >
               Giriş Yap
             </LoadingButton>
-            <Container className="flex p-0 justify-between">
+            <div className="flex p-0 justify-between w-full">
               <Grid item xs={12} sm={6} md={6}>
                 <Button href="/register" variant="outlined">
                   Üye Ol
@@ -175,7 +175,7 @@ const Login = () => {
               <Grid item xs={12} sm={6} md={6}>
                 <Button variant="outlined">Şifremi Unuttum</Button>
               </Grid>
-            </Container>
+            </div>
           </div>
         </div>
       </form>
