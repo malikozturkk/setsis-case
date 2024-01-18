@@ -13,11 +13,20 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import Link from "next/link";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { Logout } from "@mui/icons-material";
+import { logout } from "@/store/auth";
 
 const pages = ["Kategoriler", "Ürünler"];
 
 const Header = () => {
+  const dispatch = useDispatch();
+  const { user, userName } = useSelector((state: any) => state.auth);
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
+    null
+  );
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
 
@@ -25,11 +34,17 @@ const Header = () => {
     setAnchorElNav(event.currentTarget);
   };
 
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
-  //TODO: kullanıcının login durumuna göre header değişecek.
-  const login = false;
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
 
   return (
     <AppBar position="static">
@@ -107,7 +122,7 @@ const Header = () => {
               textDecoration: "none",
             }}
           >
-            LOGO
+            SETSIS
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
@@ -119,14 +134,43 @@ const Header = () => {
               </Button>
             ))}
           </Box>
-          {login ? (
+          {user ? (
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
-                <IconButton sx={{ p: 0 }}>
-                  {/* TODO: kullanıcının ismini alt olarak koy. */}
-                  <Avatar alt="Malik Sharp" src="/static/images/avatar/2.jpg" />
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt={userName} src="/static/images/avatar/2.jpg" />
                 </IconButton>
               </Tooltip>
+              <Menu
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center">
+                    <Button
+                      className="flex items-center	gap-1.5"
+                      onClick={() => {
+                        dispatch(logout());
+                        window.location.reload();
+                      }}
+                    >
+                      Çıkış Yap <Logout />
+                    </Button>
+                  </Typography>
+                </MenuItem>
+              </Menu>
             </Box>
           ) : (
             <>

@@ -60,13 +60,9 @@ const Login = () => {
     {
       onSuccess: (response) => {
         if (response.token) {
-          const expireDate = new Date(response.token.expiration);
-          Cookies.set("accessToken", response.token.accessToken, {
-            expires: expireDate,
-          });
-          Cookies.set("refreshToken", response.token.refreshToken, {
-            expires: expireDate,
-          });
+          Cookies.set("accessToken", response.token.accessToken);
+          Cookies.set("refreshToken", response.token.refreshToken);
+          Cookies.set("userName", formMethods.watch("usernameOrEmail"));
           setSuccess(true);
         } else {
           setError(true);

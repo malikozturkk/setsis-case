@@ -9,6 +9,8 @@ import {
 } from "@mui/material";
 import { GitHub, Instagram, LinkedIn } from "@mui/icons-material";
 import AdbIcon from "@mui/icons-material/Adb";
+import { useSelector } from "react-redux";
+import Avatar from "@mui/material/Avatar";
 
 const socialMediaLinks = {
   github: "https://www.github.com/malikozturkk",
@@ -17,6 +19,7 @@ const socialMediaLinks = {
 };
 
 const Footer: React.FC = () => {
+  const { user, userName } = useSelector((state: any) => state.auth);
   return (
     <Box
       sx={{
@@ -69,12 +72,20 @@ const Footer: React.FC = () => {
             <Typography variant="subtitle1" color="inherit" gutterBottom>
               ÜYELİK
             </Typography>
-            <Link href="/login" color="inherit" display="block">
-              GİRİŞ YAP
-            </Link>
-            <Link href="/register" color="inherit" display="block">
-              ÜYE OL
-            </Link>
+            {user ? (
+              <IconButton className="p-0">
+                <Avatar alt={userName} src="/static/images/avatar/2.jpg" />
+              </IconButton>
+            ) : (
+              <>
+                <Link href="/login" color="inherit" display="block">
+                  GİRİŞ YAP
+                </Link>
+                <Link href="/register" color="inherit" display="block">
+                  ÜYE OL
+                </Link>
+              </>
+            )}
           </Grid>
           <Grid item xs={6} sm={3} md={2}>
             <Typography variant="subtitle1" color="inherit" gutterBottom>
