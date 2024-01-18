@@ -35,23 +35,7 @@ export default class MyDocument extends Document {
   render() {
     return (
       <Html lang="tr" dir="tr">
-        <Head>
-          <style jsx global>
-            {`
-              html,
-              body {
-                font-family: "Open Sans", -apple-system, system-ui,
-                  BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
-                  Arial, sans-serif;
-                margin: 0;
-              }
-            `}
-          </style>
-          <link
-            href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap"
-            rel="stylesheet"
-          />
-        </Head>
+        <Head></Head>
         <body>
           <Main />
           <NextScript />
