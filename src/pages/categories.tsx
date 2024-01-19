@@ -1,8 +1,13 @@
 import React from "react";
-import dayjs from "dayjs";
-import { DateRange, Edit, Done, Close } from "@mui/icons-material";
+import { Done } from "@mui/icons-material";
 import { Controller, useForm } from "react-hook-form";
-import { TextField, FormControl, Button } from "@mui/material/";
+import {
+  TextField,
+  FormControl,
+  Button,
+  Snackbar,
+  Alert,
+} from "@mui/material/";
 import { LoadingButton } from "@mui/lab";
 import ErrorText from "@/components/ErrorText";
 import CustomDialog from "@/components/CustomDialog";
@@ -10,16 +15,11 @@ import useAuth from "@/hooks/useAuth";
 import {
   useGetAllCategoriesQuery,
   useCreateCategoryMutation,
-  useDeleteCategoryMutation,
-  useUpdateCategoryMutation,
 } from "@/store/apiSlice";
+import CategoryCard from "@/components/CategoryCard";
 
 const Categories = () => {
-  const { user } = useAuth();
-  const [edit, setEdit] = React.useState<number | null>(null);
-  const [deleteCategoryId, setDeleteCategoryId] = React.useState<number | null>(
-    null
-  );
+  const [successCreate, setSuccessCreate] = React.useState<boolean>(false);
   const [newCategory, setNewCategory] = React.useState<boolean>(false);
 
   const {
@@ -30,8 +30,6 @@ const Categories = () => {
   } = useGetAllCategoriesQuery();
 
   const [createCategory] = useCreateCategoryMutation();
-  const [updateCategory] = useUpdateCategoryMutation();
-  const [deleteCategory] = useDeleteCategoryMutation();
 
   const formMethods = useForm({
     defaultValues: {
@@ -49,16 +47,10 @@ const Categories = () => {
     formState: { errors },
   } = formMethods;
 
-  const onEdit = async (data: any) => {
-    updateCategory({ id: edit, name: data.editName });
-    reset({ editName: "" });
-    clearErrors("editName");
-    setEdit(null);
-  };
-
   const onCreate = async (data: any) => {
     createCategory({ name: data.createName });
     setNewCategory(false);
+    setSuccessCreate(true);
     reset({ createName: "" });
     clearErrors("createName");
   };
@@ -129,100 +121,23 @@ const Categories = () => {
           }}
         />
       </div>
+      <Snackbar
+        open={successCreate}
+        autoHideDuration={3000}
+        onClose={() => setSuccessCreate(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <Alert
+          onClose={() => setSuccessCreate(false)}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          Kategori başarıyla eklendi.
+        </Alert>
+      </Snackbar>
       <div className="flex items-center flex-wrap justify-center gap-12">
         {allCategories?.categories.map((category: any) => (
-          <>
-            <div
-              key={category.id}
-              className="flex rounded-lg items-center w-1/5 box-border p-4 flex-col min-h-60 justify-center gap-5 shadow-card min-w-72 max-sm:w-full max-md:w-custom"
-            >
-              {edit === category.id ? (
-                <form onSubmit={handleSubmit(onEdit)} className="flex gap-4">
-                  <Button
-                    className="h-14"
-                    color="error"
-                    variant="outlined"
-                    onClick={() => {
-                      setEdit(null), reset({ editName: "" });
-                      clearErrors("editName");
-                    }}
-                  >
-                    <Close />
-                  </Button>
-                  <Controller
-                    name="editName"
-                    control={control}
-                    render={({ field }) => (
-                      <FormControl variant="outlined">
-                        <TextField
-                          {...field}
-                          error={errors?.editName ? true : false}
-                          color="success"
-                          {...register("editName", {
-                            required: true,
-                          })}
-                          id="outlined-basic"
-                          label="Kategori İsmi"
-                          variant="outlined"
-                        />
-                        {errors.editName && (
-                          <ErrorText message="Kategori İsmi Zorunlu" />
-                        )}
-                      </FormControl>
-                    )}
-                  />
-                  <LoadingButton
-                    size="large"
-                    type="submit"
-                    loading={false}
-                    color="success"
-                    className="h-14"
-                    variant="outlined"
-                    onClick={() => setEdit(category.id)}
-                  >
-                    <Done />
-                  </LoadingButton>
-                </form>
-              ) : (
-                <h2 className="text-xl font-bold flex gap-4">
-                  {category.categoryName}
-                  <Button
-                    variant="outlined"
-                    onClick={() => {
-                      setEdit(category.id), reset({ editName: "" });
-                      clearErrors("editName");
-                    }}
-                  >
-                    <Edit />
-                  </Button>
-                </h2>
-              )}
-              <span>
-                <DateRange />
-                {dayjs(category.createdDate).format("DD MMMM YYYY HH:mm")}
-              </span>
-              <Button
-                variant="contained"
-                color="error"
-                className="bg-mui-red w-1/2"
-                type="submit"
-                onClick={() => setDeleteCategoryId(category.id)}
-              >
-                Sil
-              </Button>
-            </div>
-            <CustomDialog
-              open={deleteCategoryId === category.id}
-              title="Silmek İstediğinize Emin Misiniz ?"
-              message={`Seçtiğiniz Kategori Tamamen Silinecektir ve Bir Daha Asla Geri Getirilemeyecektir. Seçtiğiniz Kategori İsmi : ${category.categoryName}`}
-              onClose={() => {
-                setDeleteCategoryId(null);
-              }}
-              handleOnSubmit={() => {
-                deleteCategory({ id: category.id });
-              }}
-            />
-          </>
+          <CategoryCard category={category} formMethods={formMethods} />
         ))}
       </div>
     </div>
