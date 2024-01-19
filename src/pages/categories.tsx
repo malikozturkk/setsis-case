@@ -58,7 +58,9 @@ const Categories = () => {
 
   const onCreate = async (data: any) => {
     createCategory({ name: data.createName });
-    console.log(data.createName, "todo: create api onCreate");
+    setNewCategory(false);
+    reset({ createName: "" });
+    clearErrors("createName");
   };
 
   return isError ? (
@@ -114,7 +116,6 @@ const Categories = () => {
                   variant="contained"
                   color="success"
                   className="bg-mui-success h-14"
-                  onClick={() => console.log("todo: create api")}
                 >
                   Onayla <Done />
                 </LoadingButton>
@@ -123,10 +124,12 @@ const Categories = () => {
           }
           onClose={() => {
             setNewCategory(false);
+            reset({ createName: "" });
+            clearErrors("createName");
           }}
         />
       </div>
-      <div className="flex items-center flex-wrap justify-between gap-12">
+      <div className="flex items-center flex-wrap justify-center gap-12">
         {allCategories?.categories.map((category: any) => (
           <>
             <div

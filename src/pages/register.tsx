@@ -25,7 +25,7 @@ const AuthRegister = async (
   email: string,
   password: string
 ) => {
-  const response = await API.post("/api/v1/auth-register", {
+  const response = await API.post("/User", {
     username,
     firstname,
     lastname,
