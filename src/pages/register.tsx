@@ -1,27 +1,3 @@
-//server request
-// const AuthRegister = async () => {
-//   const response = await API.post("/api/v1/auth-register", {
-//     username: "malikozturkk",
-//     firstname: "malik",
-//     lastname: "öztürk",
-//     email: "malikozturk975@gmail.com",
-//     password: "12345",
-//   });
-//   return response;
-// };
-
-//client request
-// const AuthRegister = async (params: any) => {
-//   return await API.post("http://lisans.setsis.com:1468/api/User", {
-//     username: "malikozturkk1",
-//     firstname: "malik",
-//     lastname: "öztürk",
-//     email: "malikozturk9715@gmail.com",
-//     password: "12345",
-//   });
-// };
-//const { data, isLoading, isError } = useQuery("AuthRegister", AuthRegister);
-
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import { API } from "../services/index";
@@ -39,6 +15,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import ErrorText from "@/components/ErrorText";
 import CustomDialog from "@/components/CustomDialog";
+import { RegisterPayload } from "@/types/register";
 
 const AuthRegister = async (
   username: string,
@@ -115,7 +92,7 @@ const Register = () => {
     }
   );
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: RegisterPayload) => {
     handleRegister.mutate({
       username: data.username as string,
       firstname: data.firstname as string,

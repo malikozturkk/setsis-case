@@ -1,8 +1,8 @@
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
-import { API } from "../services/index";
 import { useMutation } from "react-query";
 import Cookies from "js-cookie";
+import { LoginResponse, LoginPayload } from "@/types/login";
 import {
   TextField,
   IconButton,
@@ -17,20 +17,15 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import ErrorText from "@/components/ErrorText";
 import CustomDialog from "@/components/CustomDialog";
-
-const AuthLogin = async (usernameOrEmail: string, password: string) => {
-  const response = await API.post("/api/v1/auth-login", {
-    usernameOrEmail,
-    password,
-  });
-  return response;
-};
+import useAuth from "@/hooks/useAuth";
 
 const Login = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const [error, setError] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const { loginUser, isLoading, isError, data } = useAuth();
 
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -52,11 +47,11 @@ const Login = () => {
   } = formMethods;
 
   const handleLogin = useMutation(
-    (data: { usernameOrEmail: string; password: string }) =>
-      AuthLogin(data.usernameOrEmail, data.password),
+    (data: { usernameOrEmail: string; password: string }) => loginUser(data),
     {
-      onSuccess: (response) => {
-        if (response.token) {
+      onSuccess: (response: LoginResponse) => {
+        console.log("Response: ", response);
+        if (response?.token) {
           Cookies.set("accessToken", response.token.accessToken);
           Cookies.set("refreshToken", response.token.refreshToken);
           Cookies.set("userName", formMethods.watch("usernameOrEmail"));
@@ -72,7 +67,7 @@ const Login = () => {
     }
   );
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: LoginPayload) => {
     handleLogin.mutate({
       usernameOrEmail: data.usernameOrEmail as string,
       password: data.password as string,

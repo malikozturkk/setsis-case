@@ -11,6 +11,7 @@ import { GitHub, Instagram, LinkedIn } from "@mui/icons-material";
 import AdbIcon from "@mui/icons-material/Adb";
 import { useSelector } from "react-redux";
 import Avatar from "@mui/material/Avatar";
+import { ReduxStates } from "@/types/auth";
 
 const socialMediaLinks = {
   github: "https://www.github.com/malikozturkk",
@@ -19,7 +20,7 @@ const socialMediaLinks = {
 };
 
 const Footer: React.FC = () => {
-  const { user, userName } = useSelector((state: any) => state.auth);
+  const { user, userName } = useSelector((state: ReduxStates) => state.auth);
   return (
     <Box
       sx={{
@@ -29,7 +30,7 @@ const Footer: React.FC = () => {
     >
       <Container maxWidth={false}>
         <Grid container spacing={2} justifyContent="space-between">
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid item xs={12} sm={6} md={2}>
             <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
             <Typography
               variant="h6"
@@ -68,14 +69,17 @@ const Footer: React.FC = () => {
               About Us
             </Link>
           </Grid>
-          <Grid item xs={6} sm={3} md={2}>
+          <Grid item xs={6} sm={3} md={3}>
             <Typography variant="subtitle1" color="inherit" gutterBottom>
               ÜYELİK İŞLEMLERİ
             </Typography>
             {user ? (
-              <IconButton className="p-0">
-                <Avatar alt={userName} src="/static/images/avatar/2.jpg" />
-              </IconButton>
+              <div className="flex items-center gap-2">
+                <IconButton className="p-0">
+                  <Avatar alt={userName} src="/static/images/avatar/2.jpg" />
+                </IconButton>
+                {userName.toLowerCase()}
+              </div>
             ) : (
               <>
                 <Link href="/login" color="inherit" display="block">

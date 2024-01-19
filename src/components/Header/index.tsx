@@ -16,13 +16,24 @@ import Link from "next/link";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { Logout } from "@mui/icons-material";
-import { logout } from "@/store/auth";
+import { logOut } from "@/store/auth";
+import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
+import { ReduxStates } from "@/types/auth";
 
-const pages = ["Kategoriler", "Ürünler"];
+const pages = [
+  {
+    name: "Kategoriler",
+    url: "/categories",
+  },
+  {
+    name: "Ürünler",
+    url: "/products",
+  },
+];
 
 const Header = () => {
   const dispatch = useDispatch();
-  const { user, userName } = useSelector((state: any) => state.auth);
+  const { user, userName } = useSelector((state: ReduxStates) => state.auth);
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -99,8 +110,10 @@ const Header = () => {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page}>
-                  <Typography textAlign="center">{page}</Typography>
+                <MenuItem key={page.url} component={Link} href={page.url}>
+                  <Typography textAlign="center" onClick={handleCloseNavMenu}>
+                    {page.name}
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -127,18 +140,24 @@ const Header = () => {
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
-                key={page}
+                href={page.url}
+                key={page.url}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
-                {page}
+                {page.name}
               </Button>
             ))}
           </Box>
           {user ? (
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <IconButton
+                  onClick={handleOpenUserMenu}
+                  className="text-white	text-base flex items-center	gap-2 rounded-none"
+                >
                   <Avatar alt={userName} src="/static/images/avatar/2.jpg" />
+                  {userName.toLowerCase()}
+                  {anchorElUser ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
                 </IconButton>
               </Tooltip>
               <Menu
@@ -162,7 +181,7 @@ const Header = () => {
                     <Button
                       className="flex items-center	gap-1.5"
                       onClick={() => {
-                        dispatch(logout());
+                        dispatch(logOut());
                         window.location.reload();
                       }}
                     >
@@ -174,11 +193,11 @@ const Header = () => {
             </Box>
           ) : (
             <>
-              <Button color="inherit">
-                <Link href="/register">Üye Ol</Link>
+              <Button color="inherit" href="/register">
+                Üye Ol
               </Button>
-              <Button color="inherit">
-                <Link href="/login">Giriş Yap</Link>
+              <Button color="inherit" href="/login">
+                Giriş Yap
               </Button>
             </>
           )}
