@@ -13,7 +13,21 @@ module.exports = {
       colors: {
         "mui-green": "#4caf50",
         "mui-blue": "#1976d2",
-        "mui-red": "#d32f2f"
+        "mui-red": "#d32f2f",
+        "mui-success": "#2e7d32"
+      },
+      maxWidth: {
+        'container': '1536px',
+      },
+      boxShadow: {
+        'card': 'rgba(0, 0, 0, 0.12) 0px 5px 22px 4px',
+      },
+      screens: {
+        'max-md': {'max': '1008px'},
+        'max-sm': {'max': '672px'},
+      },
+      width: {
+        "custom": "45%"
       }
     },
   },

@@ -6,8 +6,11 @@ import { Provider } from "react-redux";
 import store from "@/store";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import dayjs from "dayjs";
+import "dayjs/locale/tr";
 
 function MyApp({ Component, pageProps }: AppProps) {
+  dayjs.locale("tr");
   const queryClient = new QueryClient();
   console.log(pageProps, "pageProps geldi");
   return (

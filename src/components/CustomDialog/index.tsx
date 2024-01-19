@@ -11,6 +11,7 @@ interface CustomDialogProps {
   onClose?(): void;
   title?: string;
   message?: string | React.ReactNode;
+  handleOnSubmit?(): void;
 }
 
 const CustomDialog: React.FC<CustomDialogProps> = ({
@@ -18,6 +19,7 @@ const CustomDialog: React.FC<CustomDialogProps> = ({
   title,
   onClose,
   message,
+  handleOnSubmit,
 }) => {
   const handleCloseCallback = React.useCallback(() => {
     //@ts-ignore
@@ -37,8 +39,18 @@ const CustomDialog: React.FC<CustomDialogProps> = ({
             {message}
           </DialogContentText>
         </DialogContent>
+
         <DialogActions>
-          <Button onClick={handleCloseCallback}>Kapat</Button>
+          {onClose && <Button onClick={handleCloseCallback}>Kapat</Button>}
+          {handleOnSubmit && (
+            <Button
+              onClick={() => {
+                handleOnSubmit(), handleCloseCallback();
+              }}
+            >
+              Onayla
+            </Button>
+          )}
         </DialogActions>
       </Dialog>
     </React.Fragment>
