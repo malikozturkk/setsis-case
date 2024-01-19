@@ -13,12 +13,11 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import Link from "next/link";
-import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { Logout } from "@mui/icons-material";
 import { logOut } from "@/store/auth";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
-import { ReduxStates } from "@/types/auth";
+import useAuth from "@/hooks/useAuth";
 
 const pages = [
   {
@@ -33,7 +32,7 @@ const pages = [
 
 const Header = () => {
   const dispatch = useDispatch();
-  const { user, userName } = useSelector((state: ReduxStates) => state.auth);
+  const { user, userName } = useAuth();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -109,13 +108,14 @@ const Header = () => {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page.url} component={Link} href={page.url}>
-                  <Typography textAlign="center" onClick={handleCloseNavMenu}>
-                    {page.name}
-                  </Typography>
-                </MenuItem>
-              ))}
+              {user &&
+                pages.map((page) => (
+                  <MenuItem key={page.url} component={Link} href={page.url}>
+                    <Typography textAlign="center" onClick={handleCloseNavMenu}>
+                      {page.name}
+                    </Typography>
+                  </MenuItem>
+                ))}
             </Menu>
           </Box>
           <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
@@ -138,15 +138,16 @@ const Header = () => {
             SETSIS
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Button
-                href={page.url}
-                key={page.url}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                {page.name}
-              </Button>
-            ))}
+            {user &&
+              pages.map((page) => (
+                <Button
+                  href={page.url}
+                  key={page.url}
+                  sx={{ my: 2, color: "white", display: "block" }}
+                >
+                  {page.name}
+                </Button>
+              ))}
           </Box>
           {user ? (
             <Box sx={{ flexGrow: 0 }}>

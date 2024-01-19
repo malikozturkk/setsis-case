@@ -9,9 +9,8 @@ import {
 } from "@mui/material";
 import { GitHub, Instagram, LinkedIn } from "@mui/icons-material";
 import AdbIcon from "@mui/icons-material/Adb";
-import { useSelector } from "react-redux";
 import Avatar from "@mui/material/Avatar";
-import { ReduxStates } from "@/types/auth";
+import useAuth from "@/hooks/useAuth";
 
 const socialMediaLinks = {
   github: "https://www.github.com/malikozturkk",
@@ -20,7 +19,7 @@ const socialMediaLinks = {
 };
 
 const Footer: React.FC = () => {
-  const { user, userName } = useSelector((state: ReduxStates) => state.auth);
+  const { user, userName } = useAuth();
   return (
     <Box
       sx={{
@@ -50,25 +49,24 @@ const Footer: React.FC = () => {
               SETSIS
             </Typography>
           </Grid>
-          <Grid item xs={6} sm={3} md={2}>
-            <Typography variant="subtitle1" color="inherit" gutterBottom>
-              KATEGORİLER
-            </Typography>
-            <Link href="#" color="inherit" display="block">
-              Kategori 1
-            </Link>
-            <Link href="#" color="inherit" display="block">
-              Kategori 2
-            </Link>
-          </Grid>
-          <Grid item xs={6} sm={3} md={2}>
-            <Typography variant="subtitle1" color="inherit" gutterBottom>
-              ÜRÜNLER
-            </Typography>
-            <Link href="#" color="inherit" display="block">
-              About Us
-            </Link>
-          </Grid>
+          {user && (
+            <>
+              <Grid item xs={6} sm={3} md={2}>
+                <Typography variant="subtitle1" color="inherit" gutterBottom>
+                  <Link href="/categories" color="inherit" display="block">
+                    KATEGORİLER
+                  </Link>
+                </Typography>
+              </Grid>
+              <Grid item xs={6} sm={3} md={2}>
+                <Typography variant="subtitle1" color="inherit" gutterBottom>
+                  <Link href="/products" color="inherit" display="block">
+                    ÜRÜNLER
+                  </Link>
+                </Typography>
+              </Grid>
+            </>
+          )}
           <Grid item xs={6} sm={3} md={3}>
             <Typography variant="subtitle1" color="inherit" gutterBottom>
               ÜYELİK İŞLEMLERİ

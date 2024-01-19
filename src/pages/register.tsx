@@ -16,6 +16,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import ErrorText from "@/components/ErrorText";
 import CustomDialog from "@/components/CustomDialog";
 import { RegisterPayload } from "@/types/register";
+import useAuth from "@/hooks/useAuth";
 
 const AuthRegister = async (
   username: string,
@@ -35,10 +36,15 @@ const AuthRegister = async (
 };
 
 const Register = () => {
+  const { user } = useAuth();
   const [showPassword, setShowPassword] = React.useState(false);
   const [show, setShow] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  if (user && typeof window !== "undefined") {
+    window.location.pathname = "/";
+  }
 
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>

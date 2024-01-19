@@ -25,7 +25,11 @@ const Login = () => {
   const [success, setSuccess] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const { loginUser, isLoading, isError, data } = useAuth();
+  const { loginUser, isLoading, isError, data, user } = useAuth();
+
+  if (user && typeof window !== "undefined") {
+    window.location.pathname = "/";
+  }
 
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>

@@ -6,6 +6,7 @@ import { TextField, FormControl, Button } from "@mui/material/";
 import { LoadingButton } from "@mui/lab";
 import ErrorText from "@/components/ErrorText";
 import CustomDialog from "@/components/CustomDialog";
+import useAuth from "@/hooks/useAuth";
 
 const allCategories = {
   categories: [
@@ -43,16 +44,23 @@ const allCategories = {
 };
 
 const Categories = () => {
+  const { user } = useAuth();
   const [edit, setEdit] = React.useState<number | null>(null);
   const [deleteCategory, setDeleteCategory] = React.useState<number | null>(
     null
   );
+  const [newCategory, setNewCategory] = React.useState<boolean>(false);
 
   const formMethods = useForm({
     defaultValues: {
       editName: "",
+      createName: "",
     },
   });
+
+  if (!user && typeof window !== "undefined") {
+    window.location.pathname = "/login";
+  }
 
   const {
     control,
@@ -63,12 +71,16 @@ const Categories = () => {
     formState: { errors },
   } = formMethods;
 
-  const onSubmit = async (data: any) => {
-    console.log(data.editName, "yeni kategori ismi");
-    console.log(edit, "payloadda gönderilecek id");
-    reset();
-    clearErrors();
+  const onEdit = async (data: any) => {
+    console.log(data.editName, "todo: edit api yeni kategori ismi");
+    console.log(edit, "todo: edit api payloadda gönderilecek id");
+    reset({ editName: "" });
+    clearErrors("editName");
     setEdit(null);
+  };
+
+  const onCreate = async (data: any) => {
+    console.log(data.createName, "todo: create api onCreate");
   };
 
   return (
@@ -80,24 +92,74 @@ const Categories = () => {
           className="bg-mui-success"
           size="large"
           type="submit"
+          onClick={() => setNewCategory(true)}
         >
           Yeni Kategori Ekle
         </Button>
+        <CustomDialog
+          open={newCategory}
+          title="Yeni Kategori Ekle"
+          message={
+            <div className="flex gap-4 flex-col">
+              Yeni Kategori İsmi İçin Aşağıda Bulunan Alana İsmi Yazınız
+              <form onSubmit={handleSubmit(onCreate)} className="flex gap-4">
+                <Controller
+                  name="createName"
+                  control={control}
+                  render={({ field }) => (
+                    <FormControl variant="outlined">
+                      <TextField
+                        {...field}
+                        error={errors?.createName ? true : false}
+                        color="success"
+                        {...register("createName", {
+                          required: true,
+                        })}
+                        id="outlined-basic"
+                        label="Kategori İsmi"
+                        variant="outlined"
+                      />
+                      {errors.createName && (
+                        <ErrorText message="Kategori İsmi Zorunlu" />
+                      )}
+                    </FormControl>
+                  )}
+                />
+                <LoadingButton
+                  size="large"
+                  type="submit"
+                  loading={false}
+                  color="success"
+                  className="h-14"
+                  variant="outlined"
+                  onClick={() => console.log("todo: create api")}
+                >
+                  Onayla <Done />
+                </LoadingButton>
+              </form>
+            </div>
+          }
+          onClose={() => {
+            setNewCategory(false);
+          }}
+        />
       </div>
       <div className="flex items-center flex-wrap justify-between gap-12">
         {allCategories.categories.map((category) => (
           <>
             <div
               key={category.id}
-              className="flex rounded-lg items-center w-1/5 box-border p-4 flex-col gap-5 shadow-card min-w-72 max-sm:w-full max-md:w-custom"
+              className="flex rounded-lg items-center w-1/5 box-border p-4 flex-col min-h-60 justify-center gap-5 shadow-card min-w-72 max-sm:w-full max-md:w-custom"
             >
               {edit === category.id ? (
-                <form onSubmit={handleSubmit(onSubmit)} className="flex gap-4">
+                <form onSubmit={handleSubmit(onEdit)} className="flex gap-4">
                   <Button
+                    className="h-14"
                     color="error"
                     variant="outlined"
                     onClick={() => {
-                      setEdit(null), clearErrors(), reset();
+                      setEdit(null), reset({ editName: "" });
+                      clearErrors("editName");
                     }}
                   >
                     <Close />
@@ -129,6 +191,7 @@ const Categories = () => {
                     type="submit"
                     loading={false}
                     color="success"
+                    className="h-14"
                     variant="outlined"
                     onClick={() => setEdit(category.id)}
                   >
@@ -141,7 +204,8 @@ const Categories = () => {
                   <Button
                     variant="outlined"
                     onClick={() => {
-                      setEdit(category.id), clearErrors(), reset();
+                      setEdit(category.id), reset({ editName: "" });
+                      clearErrors("editName");
                     }}
                   >
                     <Edit />
@@ -170,7 +234,10 @@ const Categories = () => {
                 setDeleteCategory(null);
               }}
               handleOnSubmit={() => {
-                console.log(deleteCategory, "silinecek category idsi");
+                console.log(
+                  deleteCategory,
+                  "todo: delete api silinecek category idsi"
+                );
               }}
             />
           </>
