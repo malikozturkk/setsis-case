@@ -7,47 +7,17 @@ import { LoadingButton } from "@mui/lab";
 import ErrorText from "@/components/ErrorText";
 import CustomDialog from "@/components/CustomDialog";
 import useAuth from "@/hooks/useAuth";
-import { useGetAllCategoriesQuery } from "@/store/apiSlice";
-
-// const allCategories = {
-//   categories: [
-//     {
-//       categoryName: "meyve34",
-//       products: null,
-//       id: 1,
-//       createdDate: "2023-09-25T09:28:48.5618739",
-//     },
-//     {
-//       categoryName: "Ekmek ve Tahıllar2",
-//       products: null,
-//       id: 2,
-//       createdDate: "2023-09-25T20:25:05.7904936",
-//     },
-//     {
-//       categoryName: "Create deneme",
-//       products: null,
-//       id: 3,
-//       createdDate: "2024-01-19T05:30:25.2473257",
-//     },
-//     {
-//       categoryName: "Create deneme",
-//       products: null,
-//       id: 4,
-//       createdDate: "2024-01-19T05:30:25.2473257",
-//     },
-//     {
-//       categoryName: "Create deneme",
-//       products: null,
-//       id: 5,
-//       createdDate: "2024-01-19T05:30:25.2473257",
-//     },
-//   ],
-// };
+import {
+  useGetAllCategoriesQuery,
+  useCreateCategoryMutation,
+  useDeleteCategoryMutation,
+  useUpdateCategoryMutation,
+} from "@/store/apiSlice";
 
 const Categories = () => {
   const { user } = useAuth();
   const [edit, setEdit] = React.useState<number | null>(null);
-  const [deleteCategory, setDeleteCategory] = React.useState<number | null>(
+  const [deleteCategoryId, setDeleteCategoryId] = React.useState<number | null>(
     null
   );
   const [newCategory, setNewCategory] = React.useState<boolean>(false);
@@ -58,6 +28,10 @@ const Categories = () => {
     isError,
     //@ts-ignore
   } = useGetAllCategoriesQuery();
+
+  const [createCategory] = useCreateCategoryMutation();
+  const [updateCategory] = useUpdateCategoryMutation();
+  const [deleteCategory] = useDeleteCategoryMutation();
 
   const formMethods = useForm({
     defaultValues: {
@@ -76,14 +50,14 @@ const Categories = () => {
   } = formMethods;
 
   const onEdit = async (data: any) => {
-    console.log(data.editName, "todo: edit api yeni kategori ismi");
-    console.log(edit, "todo: edit api payloadda gönderilecek id");
+    updateCategory({ id: edit, name: data.editName });
     reset({ editName: "" });
     clearErrors("editName");
     setEdit(null);
   };
 
   const onCreate = async (data: any) => {
+    createCategory({ name: data.createName });
     console.log(data.createName, "todo: create api onCreate");
   };
 
@@ -229,23 +203,20 @@ const Categories = () => {
                 color="error"
                 className="bg-mui-red w-1/2"
                 type="submit"
-                onClick={() => setDeleteCategory(category.id)}
+                onClick={() => setDeleteCategoryId(category.id)}
               >
                 Sil
               </Button>
             </div>
             <CustomDialog
-              open={deleteCategory === category.id}
+              open={deleteCategoryId === category.id}
               title="Silmek İstediğinize Emin Misiniz ?"
               message={`Seçtiğiniz Kategori Tamamen Silinecektir ve Bir Daha Asla Geri Getirilemeyecektir. Seçtiğiniz Kategori İsmi : ${category.categoryName}`}
               onClose={() => {
-                setDeleteCategory(null);
+                setDeleteCategoryId(null);
               }}
               handleOnSubmit={() => {
-                console.log(
-                  deleteCategory,
-                  "todo: delete api silinecek category idsi"
-                );
+                deleteCategory({ id: category.id });
               }}
             />
           </>

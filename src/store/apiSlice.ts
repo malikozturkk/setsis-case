@@ -39,7 +39,7 @@ export const apiSlice = createApi({
       const refreshToken = Cookies.get("refreshToken");
       if (isTokenExpired()) {
         console.log("Access token expired, refreshing...")
-        API.post<LoginResponse>("/Auth/RefreshTokenLogin", { refreshToken })
+        await API.post<LoginResponse>("/Auth/RefreshTokenLogin", { refreshToken })
         .then((data) => data)
           .then((data) => {
             Cookies.set("accessToken", data.token.accessToken);
@@ -60,11 +60,36 @@ export const apiSlice = createApi({
       return headers;
     },
   }),
+  tagTypes: ['Category'],
   endpoints: (builder) => ({
     getAllCategories: builder.query({
       query: () => `/Category/GetAll`,
+      providesTags: (result, error, arg) => [{ type: 'Category', id: 'LIST' }],
+    }),
+    createCategory: builder.mutation({
+        query: (body) => ({
+            url: `/Category`,
+            method: "POST",
+            body,
+        }),
+        invalidatesTags: [{ type: 'Category', id: 'LIST' }],
+    }),
+    deleteCategory: builder.mutation({
+        query: (body) => ({
+            url: `/Category`,
+            method: "DELETE",
+            body,
+        }),
+        invalidatesTags: [{ type: 'Category', id: 'LIST' }],
+    }),
+    updateCategory: builder.mutation({
+        query: (body) => ({
+            url: `/Category`,
+            method: "PUT",
+            body,
+        }),
+        invalidatesTags: [{ type: 'Category', id: 'LIST' }],
     }),
   }),
 });
-
-export const { useGetAllCategoriesQuery} = apiSlice;
+export const { useGetAllCategoriesQuery, useCreateCategoryMutation, useDeleteCategoryMutation, useUpdateCategoryMutation } = apiSlice;
