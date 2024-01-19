@@ -20,12 +20,17 @@ const useAuth = () => {
     }
   };
 
+  const logOutUser = () => {
+    dispatch({ type: "logOut" });
+  };
+
   return {
     ...authState,
     isLoading,
     isError,
     data,
     loginUser,
+    logOutUser,
   };
 };
 

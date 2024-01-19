@@ -7,41 +7,42 @@ import { LoadingButton } from "@mui/lab";
 import ErrorText from "@/components/ErrorText";
 import CustomDialog from "@/components/CustomDialog";
 import useAuth from "@/hooks/useAuth";
+import { useGetAllCategoriesQuery } from "@/store/apiSlice";
 
-const allCategories = {
-  categories: [
-    {
-      categoryName: "meyve34",
-      products: null,
-      id: 1,
-      createdDate: "2023-09-25T09:28:48.5618739",
-    },
-    {
-      categoryName: "Ekmek ve Tahıllar2",
-      products: null,
-      id: 2,
-      createdDate: "2023-09-25T20:25:05.7904936",
-    },
-    {
-      categoryName: "Create deneme",
-      products: null,
-      id: 3,
-      createdDate: "2024-01-19T05:30:25.2473257",
-    },
-    {
-      categoryName: "Create deneme",
-      products: null,
-      id: 4,
-      createdDate: "2024-01-19T05:30:25.2473257",
-    },
-    {
-      categoryName: "Create deneme",
-      products: null,
-      id: 5,
-      createdDate: "2024-01-19T05:30:25.2473257",
-    },
-  ],
-};
+// const allCategories = {
+//   categories: [
+//     {
+//       categoryName: "meyve34",
+//       products: null,
+//       id: 1,
+//       createdDate: "2023-09-25T09:28:48.5618739",
+//     },
+//     {
+//       categoryName: "Ekmek ve Tahıllar2",
+//       products: null,
+//       id: 2,
+//       createdDate: "2023-09-25T20:25:05.7904936",
+//     },
+//     {
+//       categoryName: "Create deneme",
+//       products: null,
+//       id: 3,
+//       createdDate: "2024-01-19T05:30:25.2473257",
+//     },
+//     {
+//       categoryName: "Create deneme",
+//       products: null,
+//       id: 4,
+//       createdDate: "2024-01-19T05:30:25.2473257",
+//     },
+//     {
+//       categoryName: "Create deneme",
+//       products: null,
+//       id: 5,
+//       createdDate: "2024-01-19T05:30:25.2473257",
+//     },
+//   ],
+// };
 
 const Categories = () => {
   const { user } = useAuth();
@@ -51,16 +52,19 @@ const Categories = () => {
   );
   const [newCategory, setNewCategory] = React.useState<boolean>(false);
 
+  const {
+    data: allCategories,
+    isLoading,
+    isError,
+    //@ts-ignore
+  } = useGetAllCategoriesQuery();
+
   const formMethods = useForm({
     defaultValues: {
       editName: "",
       createName: "",
     },
   });
-
-  if (!user && typeof window !== "undefined") {
-    window.location.pathname = "/login";
-  }
 
   const {
     control,
@@ -83,7 +87,11 @@ const Categories = () => {
     console.log(data.createName, "todo: create api onCreate");
   };
 
-  return (
+  return isError ? (
+    <div>error</div>
+  ) : isLoading ? (
+    <div>loading</div>
+  ) : (
     <div className="px-6 max-w-container mx-auto w-full my-12">
       <div className="w-full flex justify-end mb-12">
         <Button
@@ -129,9 +137,9 @@ const Categories = () => {
                   size="large"
                   type="submit"
                   loading={false}
+                  variant="contained"
                   color="success"
-                  className="h-14"
-                  variant="outlined"
+                  className="bg-mui-success h-14"
                   onClick={() => console.log("todo: create api")}
                 >
                   Onayla <Done />
@@ -145,7 +153,7 @@ const Categories = () => {
         />
       </div>
       <div className="flex items-center flex-wrap justify-between gap-12">
-        {allCategories.categories.map((category) => (
+        {allCategories?.categories.map((category: any) => (
           <>
             <div
               key={category.id}

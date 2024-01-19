@@ -27,10 +27,6 @@ const Login = () => {
 
   const { loginUser, isLoading, isError, data, user } = useAuth();
 
-  if (user && typeof window !== "undefined") {
-    window.location.pathname = "/";
-  }
-
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
@@ -58,6 +54,7 @@ const Login = () => {
         if (response?.token) {
           Cookies.set("accessToken", response.token.accessToken);
           Cookies.set("refreshToken", response.token.refreshToken);
+          Cookies.set("expiration", response.token.expiration);
           Cookies.set("userName", formMethods.watch("usernameOrEmail"));
           setSuccess(true);
         } else {

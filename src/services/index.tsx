@@ -1,5 +1,6 @@
 import { CreateAPI } from "../helpers/CreateAPI";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import Cookie from "js-cookie";
 
 import {
   APIGlobalErrorHandler,
@@ -8,17 +9,27 @@ import {
 import { LoginPayload } from "@/types/login";
 import { RegisterPayload } from "@/types/register";
 
-const SETSIS_API_URL = process.env.SETSIS_API_URL;
+const SETSIS_API_URL = process.env.NEXT_PUBLIC_SETSIS_API_URL;
 
 export const authApi = createApi({
   reducerPath: "authApi",
-  baseQuery: fetchBaseQuery({ baseUrl: `api/v1` }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: SETSIS_API_URL,
+  }),
+
   endpoints: (builder) => ({
     logIn: builder.mutation({
       query: (credentials) => ({
-        url: "auth-login",
+        url: "/Auth/Login",
         method: "POST",
         body: credentials,
+      }),
+    }),
+    refreshTokenLogin: builder.mutation({
+      query: (token) => ({
+        url: "/Auth/RefreshTokenLogin",
+        method: "POST",
+        body: token,
       }),
     }),
   }),

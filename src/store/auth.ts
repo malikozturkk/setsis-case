@@ -3,39 +3,7 @@ import { API } from '@/services';
 import Cookie from 'js-cookie';
 import { SliceTypes } from '@/types/auth';
 
-interface LogInParams {
-    usernameOrEmail: string;
-    password: string;
-}
 
-export const logIn = async ({ usernameOrEmail, password}: LogInParams) => {
-  try {
-        const response = await API.post("/api/v1/auth-login", {
-          usernameOrEmail,
-          password,
-        }); 
-        
-       const res = await response.json()
-       return res.data
-  } catch (error) {
-    return error;
-  }
-};
-
-export const refreshSession = createAsyncThunk('auth/refreshSession', async (refreshToken, { rejectWithValue }) => {
-  try {
-    const response = await fetch('/api/refresh', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ refreshToken }),
-    });
-    const res = await response.json();
-    if (!res.success) throw new Error(res.message);
-    return res.data;
-  } catch (error) {
-    return rejectWithValue(error);
-  }
-});
 
 const authSlice = createSlice({
   name: 'auth',
@@ -53,6 +21,13 @@ const authSlice = createSlice({
       Cookie.remove('refreshToken');
       Cookie.remove('userName');
     },
+    refreshSession: (state, action) => {
+      state.user = true;
+      state.refreshToken = action.payload.refreshToken;
+      Cookie.set('accessToken', action.payload.accessToken);
+      Cookie.set('refreshToken', action.payload.refreshToken);
+      Cookie.set('expiration', action.payload.expiration);
+    }
   },
   // extraReducers: {
   //   [logIn.fulfilled]: (state, action) => {
@@ -67,6 +42,6 @@ const authSlice = createSlice({
   // },
 });
 
-export const { logOut } = authSlice.actions;
+export const { logOut, refreshSession } = authSlice.actions;
 
 export default authSlice.reducer;

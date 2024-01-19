@@ -42,10 +42,6 @@ const Register = () => {
   const [success, setSuccess] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  if (user && typeof window !== "undefined") {
-    window.location.pathname = "/";
-  }
-
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
