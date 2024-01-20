@@ -3,6 +3,8 @@ import { useForm, Controller } from "react-hook-form";
 import { useMutation } from "react-query";
 import Cookies from "js-cookie";
 import { LoginResponse, LoginPayload } from "@/types/login";
+import cookies from "next-cookies";
+
 import {
   TextField,
   IconButton,
@@ -18,6 +20,21 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import ErrorText from "@/components/ErrorText";
 import CustomDialog from "@/components/CustomDialog";
 import useAuth from "@/hooks/useAuth";
+
+import { GetServerSideProps } from "next";
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const allCookies = cookies(context);
+  const user = allCookies.accessToken;
+  if (user) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+  return { props: {} };
+};
 
 const Login = () => {
   const [showPassword, setShowPassword] = React.useState(false);

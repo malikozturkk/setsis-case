@@ -60,7 +60,7 @@ export const apiSlice = createApi({
       return headers;
     },
   }),
-  tagTypes: ['Category'],
+  tagTypes: ['Category', 'Product'],
   endpoints: (builder) => ({
     getAllCategories: builder.query({
       query: () => `/Category/GetAll`,
@@ -90,6 +90,38 @@ export const apiSlice = createApi({
         }),
         invalidatesTags: [{ type: 'Category', id: 'LIST' }],
     }),
+    getAllProducts: builder.query({
+        query: (pageNumber = 1) => `/Product/GetAll?PageNumber=${pageNumber}`,
+        providesTags: (result, error, arg) => [{ type: 'Product', id: 'LIST' }],
+    }),
+    createProduct: builder.mutation({
+        query: (body) => ({
+            url: `/Product`,
+            method: "POST",
+            body,
+        }),
+        invalidatesTags: [{ type: 'Product', id: 'LIST' }],
+    }),
+    deleteProduct: builder.mutation({
+      query: (body) => ({
+          url: `/Product`,
+          method: "DELETE",
+          body,
+      }),
+      invalidatesTags: [{ type: 'Product', id: 'LIST' }],
+  }),
+  updateProduct: builder.mutation({
+    query: (body) => ({
+        url: `/Product`,
+        method: "PUT",
+        body,
+    }),
+    invalidatesTags: [{ type: 'Product', id: 'LIST' }],
+}),
+getByCategoryId: builder.query({
+  query: (pageNumber = 1, CategoryId = 326) => `/Product/GetByCategoryId?PageNumber=${pageNumber}&CategoryId=${CategoryId}`,
+  providesTags: (result, error, arg) => [{ type: 'Product', id: 'LIST' }],
+}),
   }),
 });
-export const { useGetAllCategoriesQuery, useCreateCategoryMutation, useDeleteCategoryMutation, useUpdateCategoryMutation } = apiSlice;
+export const { useGetAllCategoriesQuery, useCreateCategoryMutation, useDeleteCategoryMutation, useUpdateCategoryMutation, useGetAllProductsQuery, useCreateProductMutation, useDeleteProductMutation, useUpdateProductMutation, useGetByCategoryIdQuery } = apiSlice;

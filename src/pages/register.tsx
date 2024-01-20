@@ -17,6 +17,7 @@ import ErrorText from "@/components/ErrorText";
 import CustomDialog from "@/components/CustomDialog";
 import { RegisterPayload } from "@/types/register";
 import useAuth from "@/hooks/useAuth";
+import cookies from "next-cookies";
 
 const AuthRegister = async (
   username: string,
@@ -33,6 +34,22 @@ const AuthRegister = async (
     password,
   });
   return response;
+};
+
+import { GetServerSideProps } from "next";
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const allCookies = cookies(context);
+  const user = allCookies.accessToken;
+  console.log(user, "ahanda user");
+  if (user) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+  return { props: {} };
 };
 
 const Register = () => {

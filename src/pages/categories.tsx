@@ -11,16 +11,32 @@ import {
 import { LoadingButton } from "@mui/lab";
 import ErrorText from "@/components/ErrorText";
 import CustomDialog from "@/components/CustomDialog";
-import useAuth from "@/hooks/useAuth";
 import {
   useGetAllCategoriesQuery,
   useCreateCategoryMutation,
 } from "@/store/apiSlice";
 import CategoryCard from "@/components/CategoryCard";
 
+import cookies from "next-cookies";
+import { GetServerSideProps } from "next";
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const allCookies = cookies(context);
+  const user = allCookies.accessToken;
+  if (!user) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+  return { props: {} };
+};
+
 const Categories = () => {
   const [successCreate, setSuccessCreate] = React.useState<boolean>(false);
   const [newCategory, setNewCategory] = React.useState<boolean>(false);
+  const [edit, setEdit] = React.useState<number | null>(null);
 
   const {
     data: allCategories,
@@ -137,7 +153,12 @@ const Categories = () => {
       </Snackbar>
       <div className="flex items-center flex-wrap justify-center gap-12">
         {allCategories?.categories.map((category: any) => (
-          <CategoryCard category={category} formMethods={formMethods} />
+          <CategoryCard
+            data={category}
+            formMethods={formMethods}
+            edit={edit}
+            setEdit={setEdit}
+          />
         ))}
       </div>
     </div>

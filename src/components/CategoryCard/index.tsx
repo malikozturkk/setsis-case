@@ -17,7 +17,7 @@ import {
   useDeleteCategoryMutation,
 } from "@/store/apiSlice";
 
-const CategoryCard = ({ category, formMethods }: any) => {
+const CategoryCard = ({ data, formMethods, edit, setEdit }: any) => {
   const {
     control,
     register,
@@ -26,7 +26,6 @@ const CategoryCard = ({ category, formMethods }: any) => {
     clearErrors,
     formState: { errors },
   } = formMethods;
-  const [edit, setEdit] = React.useState<number | null>(null);
   const [deleteCategoryId, setDeleteCategoryId] = React.useState<number | null>(
     null
   );
@@ -47,7 +46,7 @@ const CategoryCard = ({ category, formMethods }: any) => {
   return (
     <>
       <div
-        key={category.id}
+        key={data.id}
         className="flex rounded-lg items-center w-1/5 box-border p-4 flex-col min-h-60 justify-center gap-5 shadow-card min-w-72 max-sm:w-full max-md:w-custom"
       >
         <Snackbar
@@ -64,7 +63,7 @@ const CategoryCard = ({ category, formMethods }: any) => {
             Kategori başarıyla düzenlendi.
           </Alert>
         </Snackbar>
-        {edit === category.id ? (
+        {edit === data.id ? (
           <form onSubmit={handleSubmit(onEdit)} className="flex gap-4">
             <Button
               className="h-14"
@@ -90,11 +89,11 @@ const CategoryCard = ({ category, formMethods }: any) => {
                       required: true,
                     })}
                     id="outlined-basic"
-                    label="Kategori İsmi"
+                    label={`Kategori İsmi`}
                     variant="outlined"
                   />
                   {errors.editName && (
-                    <ErrorText message="Kategori İsmi Zorunlu" />
+                    <ErrorText message={`Kategori İsmi Zorunlu`} />
                   )}
                 </FormControl>
               )}
@@ -106,18 +105,18 @@ const CategoryCard = ({ category, formMethods }: any) => {
               color="success"
               className="h-14"
               variant="outlined"
-              onClick={() => setEdit(category.id)}
+              onClick={() => setEdit(data.id)}
             >
               <Done />
             </LoadingButton>
           </form>
         ) : (
           <h2 className="text-xl font-bold flex gap-4">
-            {category.categoryName}
+            {data.categoryName}
             <Button
               variant="outlined"
               onClick={() => {
-                setEdit(category.id), reset({ editName: "" });
+                setEdit(data.id), reset({ editName: "" });
                 clearErrors("editName");
               }}
             >
@@ -127,7 +126,7 @@ const CategoryCard = ({ category, formMethods }: any) => {
         )}
         <span>
           <DateRange />
-          {dayjs(category.createdDate).format("DD MMMM YYYY HH:mm")}
+          {dayjs(data.createdDate).format("DD MMMM YYYY HH:mm")}
         </span>
         <Button
           variant="contained"
@@ -135,21 +134,21 @@ const CategoryCard = ({ category, formMethods }: any) => {
           className="bg-mui-red w-1/2"
           type="submit"
           onClick={() => {
-            setDeleteCategoryId(category.id);
+            setDeleteCategoryId(data.id);
           }}
         >
           Sil
         </Button>
       </div>
       <CustomDialog
-        open={deleteCategoryId === category.id}
+        open={deleteCategoryId === data.id}
         title="Silmek İstediğinize Emin Misiniz ?"
-        message={`Seçtiğiniz Kategori Tamamen Silinecektir ve Bir Daha Asla Geri Getirilemeyecektir. Seçtiğiniz Kategori İsmi : ${category.categoryName}`}
+        message={`Seçtiğiniz Kategori Tamamen Silinecektir ve Bir Daha Asla Geri Getirilemeyecektir. Seçtiğiniz Kategori İsmi : ${data.categoryName}`}
         onClose={() => {
           setDeleteCategoryId(null);
         }}
         handleOnSubmit={() => {
-          deleteCategory({ id: category.id });
+          deleteCategory({ id: data.id });
           setSuccessDelete(true);
         }}
       />
