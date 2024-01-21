@@ -74,6 +74,7 @@ export default function CategoryPage() {
               ))
           : getByCategoryId?.products.map((product: any) => (
               <ProductCard
+                key={product.id}
                 allCategories={allCategories}
                 data={product}
                 formMethods={formMethods}

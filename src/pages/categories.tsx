@@ -165,6 +165,7 @@ const Categories = () => {
               ))
           : allCategories?.categories.map((category: AllCategoryProps) => (
               <CategoryCard
+                key={category.id}
                 data={category}
                 formMethods={formMethods}
                 edit={edit}

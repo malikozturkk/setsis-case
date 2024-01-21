@@ -29,7 +29,7 @@ const HomePage = () => {
               </h1>
               <div className="border-4 border-mui-hovered-blue rounded-lg">
                 {allCategories?.categories.map((category: AllCategoryProps) => (
-                  <Button href={`/${category.id}`}>
+                  <Button href={`/${category.id}`} key={category.id}>
                     {category.categoryName}
                   </Button>
                 ))}

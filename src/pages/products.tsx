@@ -139,6 +139,7 @@ const Categories = () => {
               ))
           : allProducts?.products.map((product: any) => (
               <ProductCard
+                key={product.id}
                 allCategories={allCategories}
                 data={product}
                 formMethods={formMethods}
