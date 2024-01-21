@@ -42,7 +42,7 @@ const Login = () => {
   const [success, setSuccess] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const { loginUser, isLoading, isError, data, user } = useAuth();
+  const { loginUser } = useAuth();
 
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -67,7 +67,6 @@ const Login = () => {
     (data: { usernameOrEmail: string; password: string }) => loginUser(data),
     {
       onSuccess: (response: LoginResponse) => {
-        console.log("Response: ", response);
         if (response?.token) {
           Cookies.set("accessToken", response.token.accessToken);
           Cookies.set("refreshToken", response.token.refreshToken);

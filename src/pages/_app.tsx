@@ -12,7 +12,6 @@ import "dayjs/locale/tr";
 function MyApp({ Component, pageProps }: AppProps) {
   dayjs.locale("tr");
   const queryClient = new QueryClient();
-  console.log(pageProps, "pageProps geldi");
   return (
     <>
       <Head>

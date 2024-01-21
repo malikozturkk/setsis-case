@@ -40,7 +40,6 @@ import { GetServerSideProps } from "next";
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const allCookies = cookies(context);
   const user = allCookies.accessToken;
-  console.log(user, "ahanda user");
   if (user) {
     return {
       redirect: {
