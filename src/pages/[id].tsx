@@ -65,7 +65,7 @@ export default function CategoryPage() {
     />
   ) : (
     <div className="px-6 max-w-container mx-auto w-full my-12">
-      <div className="flex items-center flex-wrap justify-center gap-12 flex-col">
+      <div className="flex items-center flex-wrap justify-center gap-12">
         {isLoading
           ? Array(5)
               .fill(null)
@@ -81,25 +81,24 @@ export default function CategoryPage() {
                 setEdit={setEdit}
               />
             ))}
+      </div>
+      <div className="flex justify-center items-center mt-12 gap-5">
+        {isLoading ? (
+          <Skeleton width={150} height={36} />
+        ) : (
+          <Button disabled={page === 1} onClick={handlePreviousPage}>
+            <NavigateBefore /> Önceki Sayfa
+          </Button>
+        )}
 
-        <div className="flex justify-center items-center mt-12 gap-5">
-          {isLoading ? (
-            <Skeleton width={150} height={36} />
-          ) : (
-            <Button disabled={page === 1} onClick={handlePreviousPage}>
-              <NavigateBefore /> Önceki Sayfa
-            </Button>
-          )}
-
-          {/* TODO: Api response unda sonraki sayfanın olup olmadığı bilgisi dönmediği için sonraki sayfa butonu ancak böyle disabled yapılınabiliyor. */}
-          {isLoading ? (
-            <Skeleton width={150} height={36} />
-          ) : (
-            <Button disabled={disabled} onClick={handleNextPage}>
-              Sonraki Sayfa <NavigateNext />
-            </Button>
-          )}
-        </div>
+        {/* TODO: Api response unda sonraki sayfanın olup olmadığı bilgisi dönmediği için sonraki sayfa butonu ancak böyle disabled yapılınabiliyor. */}
+        {isLoading ? (
+          <Skeleton width={150} height={36} />
+        ) : (
+          <Button disabled={disabled} onClick={handleNextPage}>
+            Sonraki Sayfa <NavigateNext />
+          </Button>
+        )}
       </div>
     </div>
   );

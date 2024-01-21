@@ -1,13 +1,12 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { Button, Snackbar, Alert } from "@mui/material/";
-import { NavigateNext, NavigateBefore } from "@mui/icons-material";
+import { NavigateNext, NavigateBefore, Add } from "@mui/icons-material";
 import CustomDialog from "@/components/CustomDialog";
 import Skeleton from "react-loading-skeleton";
 import {
   useGetAllProductsQuery,
   useGetAllCategoriesQuery,
-  useGetByCategoryIdQuery,
 } from "@/store/apiSlice";
 import ProductCard from "@/components/ProductCard";
 import EditOrCreateCard from "@/components/ProductCard/EditOrCreateCard";
@@ -92,6 +91,7 @@ const Categories = () => {
             onClick={() => setNewProduct(true)}
           >
             Yeni Ürün Ekle
+            <Add />
           </Button>
         )}
         <CustomDialog

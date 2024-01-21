@@ -119,7 +119,7 @@ export const apiSlice = createApi({
     invalidatesTags: [{ type: 'Product', id: 'LIST' }],
 }),
 getByCategoryId: builder.query({
-  query: (pageNumber = 1, CategoryId = 326) => `/Product/GetByCategoryId?PageNumber=${pageNumber}&CategoryId=${CategoryId}`,
+  query: (pageNumber: number = 1, CategoryId: number = 326) => `/Product/GetByCategoryId?PageNumber=${pageNumber}&CategoryId=${CategoryId}`,
   providesTags: (result, error, arg) => [{ type: 'Product', id: 'LIST' }],
 }),
   }),

@@ -1,5 +1,5 @@
 import React from "react";
-import { Done } from "@mui/icons-material";
+import { Add, Done } from "@mui/icons-material";
 import { Controller, useForm } from "react-hook-form";
 import {
   TextField,
@@ -90,6 +90,7 @@ const Categories = () => {
             onClick={() => setNewCategory(true)}
           >
             Yeni Kategori Ekle
+            <Add />
           </Button>
         )}
         <CustomDialog

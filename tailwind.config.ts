@@ -14,7 +14,8 @@ module.exports = {
         "mui-green": "#4caf50",
         "mui-blue": "#1976d2",
         "mui-red": "#d32f2f",
-        "mui-success": "#2e7d32"
+        "mui-success": "#2e7d32",
+        "mui-hovered-blue": "rgba(25, 118, 210, 0.04)"
       },
       maxWidth: {
         'container': '1536px',
