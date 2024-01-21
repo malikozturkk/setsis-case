@@ -15,6 +15,7 @@ import {
   useGetAllCategoriesQuery,
   useCreateCategoryMutation,
 } from "@/store/apiSlice";
+import Skeleton from "react-loading-skeleton";
 import CategoryCard from "@/components/CategoryCard";
 
 import cookies from "next-cookies";
@@ -73,21 +74,23 @@ const Categories = () => {
 
   return isError ? (
     <div>error</div>
-  ) : isLoading ? (
-    <div>loading</div>
   ) : (
     <div className="px-6 max-w-container mx-auto w-full my-12">
       <div className="w-full flex justify-end mb-12">
-        <Button
-          variant="contained"
-          color="success"
-          className="bg-mui-success"
-          size="large"
-          type="submit"
-          onClick={() => setNewCategory(true)}
-        >
-          Yeni Kategori Ekle
-        </Button>
+        {isLoading ? (
+          <Skeleton width={210} height={42} />
+        ) : (
+          <Button
+            variant="contained"
+            color="success"
+            className="bg-mui-success"
+            size="large"
+            type="submit"
+            onClick={() => setNewCategory(true)}
+          >
+            Yeni Kategori Ekle
+          </Button>
+        )}
         <CustomDialog
           open={newCategory}
           title="Yeni Kategori Ekle"
@@ -152,14 +155,20 @@ const Categories = () => {
         </Alert>
       </Snackbar>
       <div className="flex items-center flex-wrap justify-center gap-12">
-        {allCategories?.categories.map((category: any) => (
-          <CategoryCard
-            data={category}
-            formMethods={formMethods}
-            edit={edit}
-            setEdit={setEdit}
-          />
-        ))}
+        {isLoading
+          ? Array(8)
+              .fill(null)
+              .map((_, index) => (
+                <Skeleton key={index} width={280} height={240} />
+              ))
+          : allCategories?.categories.map((category: any) => (
+              <CategoryCard
+                data={category}
+                formMethods={formMethods}
+                edit={edit}
+                setEdit={setEdit}
+              />
+            ))}
       </div>
     </div>
   );

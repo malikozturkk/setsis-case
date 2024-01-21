@@ -18,10 +18,11 @@ import {
 
 const EditOrCreateCard = ({
   allCategories,
-  setNewProduct,
+  closeDialog,
   setSuccessCreate,
   formMethods,
   type,
+  edit,
 }: any) => {
   const [createProduct] = useCreateProductMutation();
   const [updateProduct] = useUpdateProductMutation();
@@ -52,10 +53,10 @@ const EditOrCreateCard = ({
       stock: data.createStock,
       categoryId: findCategoryIdByLabel(data.createCategoryId),
     });
-    setNewProduct(false);
+    closeDialog(false);
     setSuccessCreate(true);
-    reset({ createName: "" });
-    clearErrors("createName");
+    reset();
+    clearErrors();
   };
 
   const onUpdate = async (data: any) => {
@@ -63,12 +64,12 @@ const EditOrCreateCard = ({
       name: data.createName,
       price: parseInt(data.createPrice),
       stock: parseInt(data.createStock),
-      id: findCategoryIdByLabel(data.createCategoryId),
+      id: edit,
     });
-    setNewProduct(false);
+    closeDialog(false);
     setSuccessCreate(true);
-    reset({ createName: "" });
-    clearErrors("createName");
+    reset();
+    clearErrors();
   };
 
   return (

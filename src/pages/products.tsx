@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { Button, Snackbar, Alert } from "@mui/material/";
 import { NavigateNext, NavigateBefore } from "@mui/icons-material";
 import CustomDialog from "@/components/CustomDialog";
+import Skeleton from "react-loading-skeleton";
 import {
   useGetAllProductsQuery,
   useGetAllCategoriesQuery,
@@ -31,6 +32,7 @@ const Categories = () => {
   const [newProduct, setNewProduct] = React.useState<boolean>(false);
   const [page, setPage] = React.useState<number>(1);
   const [edit, setEdit] = React.useState<number | null>(null);
+  const [errorModal, setErrorModal] = React.useState<boolean>(false);
 
   const {
     data: allProducts,
@@ -72,22 +74,32 @@ const Categories = () => {
   const { reset, clearErrors } = formMethods;
 
   return isError ? (
-    <div>error</div>
-  ) : isLoading ? (
-    <div>loading</div>
+    <CustomDialog
+      open={true}
+      title="Hata Var !"
+      message="Session süresi veya başka bir sebepten apiye ulaşılamadı."
+      onClose={() => {
+        setErrorModal(false);
+        window.location.pathname = "/";
+      }}
+    />
   ) : (
     <div className="px-6 max-w-container mx-auto w-full my-12">
       <div className="w-full flex justify-end mb-12">
-        <Button
-          variant="contained"
-          color="success"
-          className="bg-mui-success"
-          size="large"
-          type="submit"
-          onClick={() => setNewProduct(true)}
-        >
-          Yeni Ürün Ekle
-        </Button>
+        {isLoading ? (
+          <Skeleton width={175} height={42} />
+        ) : (
+          <Button
+            variant="contained"
+            color="success"
+            className="bg-mui-success"
+            size="large"
+            type="submit"
+            onClick={() => setNewProduct(true)}
+          >
+            Yeni Ürün Ekle
+          </Button>
+        )}
         <CustomDialog
           open={newProduct}
           title="Yeni Ürün Ekle"
@@ -96,7 +108,7 @@ const Categories = () => {
               Yeni Ürün Bilgilerini Aşağıya Yazınız.
               <EditOrCreateCard
                 allCategories={allCategories}
-                setNewProduct={setNewProduct}
+                closeDialog={setNewProduct}
                 setSuccessCreate={setSuccessCreate}
                 formMethods={formMethods}
                 type="create"
@@ -125,24 +137,39 @@ const Categories = () => {
         </Alert>
       </Snackbar>
       <div className="flex items-center flex-wrap justify-center gap-12">
-        {allProducts?.products.map((product: any) => (
-          <ProductCard
-            allCategories={allCategories}
-            data={product}
-            formMethods={formMethods}
-            edit={edit}
-            setEdit={setEdit}
-          />
-        ))}
+        {isLoading
+          ? Array(5)
+              .fill(null)
+              .map((_, index) => (
+                <Skeleton key={index} width={280} height={240} />
+              ))
+          : allProducts?.products.map((product: any) => (
+              <ProductCard
+                allCategories={allCategories}
+                data={product}
+                formMethods={formMethods}
+                edit={edit}
+                setEdit={setEdit}
+              />
+            ))}
       </div>
-      <div className="flex justify-center items-center mt-12">
-        <Button disabled={page === 1} onClick={handlePreviousPage}>
-          <NavigateBefore /> Önceki Sayfa
-        </Button>
+      <div className="flex justify-center items-center mt-12 gap-5">
+        {isLoading ? (
+          <Skeleton width={150} height={36} />
+        ) : (
+          <Button disabled={page === 1} onClick={handlePreviousPage}>
+            <NavigateBefore /> Önceki Sayfa
+          </Button>
+        )}
+
         {/* TODO: Api response unda sonraki sayfanın olup olmadığı bilgisi dönmediği için sonraki sayfa butonu ancak böyle disabled yapılınabiliyor. */}
-        <Button disabled={disabled} onClick={handleNextPage}>
-          Sonraki Sayfa <NavigateNext />
-        </Button>
+        {isLoading ? (
+          <Skeleton width={150} height={36} />
+        ) : (
+          <Button disabled={disabled} onClick={handleNextPage}>
+            Sonraki Sayfa <NavigateNext />
+          </Button>
+        )}
       </div>
     </div>
   );

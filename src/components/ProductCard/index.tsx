@@ -24,6 +24,16 @@ const ProductCard = ({
 
   const [deleteProduct] = useDeleteProductMutation();
 
+  const handleClick = () => {
+    setEdit(data.id);
+    reset({ editName: "" });
+    clearErrors("editName");
+  };
+
+  React.useEffect(() => {
+    setEditProduct(edit === data.id);
+  }, [edit, data.id]);
+
   return (
     <>
       <div
@@ -46,26 +56,21 @@ const ProductCard = ({
         </Snackbar>
         <h2 className="text-xl font-bold flex gap-4">
           {data.productName}
-          <Button
-            variant="outlined"
-            onClick={() => {
-              setEdit(data.id), reset({ editName: "" });
-              clearErrors("editName");
-            }}
-          >
+          <Button variant="outlined" onClick={handleClick}>
             <Edit />
           </Button>
         </h2>
         {edit === data.id && (
           <CustomDialog
-            open={edit === data.id}
+            open={editProduct}
             title="Ürün Bilgilerini Güncelle"
             message={
               <div>
                 Ürün Değişikliği İçin Yeni Bilgilerini Aşağıya Yazınız.
                 <EditOrCreateCard
+                  edit={edit}
                   allCategories={allCategories}
-                  setNewProduct={setEditProduct}
+                  closeDialog={setEditProduct}
                   setSuccessCreate={setSuccessEdit}
                   formMethods={formMethods}
                   type="edit"
