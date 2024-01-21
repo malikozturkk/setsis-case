@@ -44,12 +44,6 @@ const Categories = () => {
   const disabled = allProducts?.products?.length === 0;
 
   const {
-    data: getByCategoryId,
-    //@ts-ignore
-  } = useGetByCategoryIdQuery(page, 326);
-  console.log(getByCategoryId, "getByCategoryId");
-
-  const {
     data: allCategories,
     //@ts-ignore
   } = useGetAllCategoriesQuery();
