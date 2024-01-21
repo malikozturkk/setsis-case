@@ -17,6 +17,7 @@ import {
 } from "@/store/apiSlice";
 import Skeleton from "react-loading-skeleton";
 import CategoryCard from "@/components/CategoryCard";
+import { FormData, AllCategoryProps } from "@/types/category";
 
 import cookies from "next-cookies";
 import { GetServerSideProps } from "next";
@@ -64,7 +65,7 @@ const Categories = () => {
     formState: { errors },
   } = formMethods;
 
-  const onCreate = async (data: any) => {
+  const onCreate = async (data: FormData) => {
     createCategory({ name: data.createName });
     setNewCategory(false);
     setSuccessCreate(true);
@@ -161,7 +162,7 @@ const Categories = () => {
               .map((_, index) => (
                 <Skeleton key={index} width={280} height={240} />
               ))
-          : allCategories?.categories.map((category: any) => (
+          : allCategories?.categories.map((category: AllCategoryProps) => (
               <CategoryCard
                 data={category}
                 formMethods={formMethods}

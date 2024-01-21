@@ -16,8 +16,14 @@ import {
   useUpdateCategoryMutation,
   useDeleteCategoryMutation,
 } from "@/store/apiSlice";
+import { CategoryCardProps, FormData } from "@/types/category";
 
-const CategoryCard = ({ data, formMethods, edit, setEdit }: any) => {
+const CategoryCard: React.FC<CategoryCardProps> = ({
+  data,
+  formMethods,
+  edit,
+  setEdit,
+}) => {
   const {
     control,
     register,
@@ -35,7 +41,7 @@ const CategoryCard = ({ data, formMethods, edit, setEdit }: any) => {
   const [updateCategory] = useUpdateCategoryMutation();
   const [deleteCategory] = useDeleteCategoryMutation();
 
-  const onEdit = async (data: any) => {
+  const onEdit = async (data: FormData) => {
     updateCategory({ id: edit, name: data.editName });
     setSuccessEdit(true);
     reset({ editName: "" });

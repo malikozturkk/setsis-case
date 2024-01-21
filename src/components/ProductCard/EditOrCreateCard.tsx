@@ -11,6 +11,7 @@ import {
 import { LoadingButton } from "@mui/lab";
 import ErrorText from "@/components/ErrorText";
 import Autocomplete from "@mui/material/Autocomplete";
+import { AllCategoryProps, CategoryMapperProps } from "@/types/category";
 import {
   useCreateProductMutation,
   useUpdateProductMutation,
@@ -36,13 +37,17 @@ const EditOrCreateCard = ({
     formState: { errors },
   } = formMethods;
 
-  const categories = allCategories?.categories.map((category: any) => ({
-    label: category.categoryName,
-    categoryId: category.id,
-  }));
+  const categories = allCategories?.categories.map(
+    (category: AllCategoryProps) => ({
+      label: category.categoryName,
+      categoryId: category.id,
+    })
+  );
 
-  function findCategoryIdByLabel(label: any) {
-    const category = categories.find((c: any) => c.label === label);
+  function findCategoryIdByLabel(label: string) {
+    const category = categories.find(
+      (c: CategoryMapperProps) => c.label === label
+    );
     return category ? category.categoryId : undefined;
   }
 
