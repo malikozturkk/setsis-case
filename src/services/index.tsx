@@ -51,8 +51,6 @@ export function CoreAPI<T>() {
 export const API = CoreAPI();
 
 export const AuthLogin = async (params: LoginPayload) => {
-  console.log(params, "result params services");
-  console.log(await API.post("/Auth/Login", params), "result services");
   return await API.post("/Auth/Login", params);
 };
 
