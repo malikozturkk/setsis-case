@@ -57,11 +57,6 @@ export const AuthLogin = async (params: LoginPayload) => {
 export const AuthRegister = async (params: RegisterPayload) => {
   return await API.post("/User", params);
 };
-
-export const RefreshTokenLogin = async (params: string) => {
-  return await API.post("/Auth/RefreshTokenLogin", params);
-};
-
 export const GetAllCategories = async () => {
   return await API.get("/Category​/GetAll");
 };

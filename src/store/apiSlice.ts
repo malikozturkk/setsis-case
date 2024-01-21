@@ -30,34 +30,63 @@ const isTokenExpired = () => {
 };
 
 
+let isRefreshing = false;
+let refreshSubscribers: any = [];
+
+function subscribeTokenRefresh(cb: any) {
+  refreshSubscribers.push(cb);
+}
+
+function onRrefreshed(token: any) {
+  //@ts-ignore
+  refreshSubscribers.map(cb => cb(token));
+}
+
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
     baseUrl: SETSIS_API_URL,
     prepareHeaders: async (headers, { getState }) => {
       let token = Cookies.get("accessToken");
-      const refreshToken = Cookies.get("refreshToken");
-      if (isTokenExpired()) {
-        console.log("Access token expired, refreshing...")
-        await API.post<LoginResponse>("/Auth/RefreshTokenLogin", { refreshToken })
-        .then((data) => data)
-          .then((data) => {
-            Cookies.set("accessToken", data.token.accessToken);
-            Cookies.set("refreshToken", data.token.refreshToken);
-            Cookies.set("expiration", data.token.expiration);
-          })
-          .catch((err) => {
-            throw err;
-          });
-      }
+  const refreshToken = Cookies.get("refreshToken");
 
-      token = Cookies.get("accessToken");
+  if (isTokenExpired() && !isRefreshing) {
+    isRefreshing = true;
+    console.log("Access token expired, refreshing...");
 
-      if (token) {
-        headers.set("Authorization", `Bearer ${token}`);
-      }
+    try {
+      const response = await API.post("/Auth/RefreshTokenLogin", { refreshToken });
+      const data = response;
+      console.log(data, 'data al sana');
 
-      return headers;
+      Cookies.set("accessToken", data.token.accessToken);
+      Cookies.set("refreshToken", data.token.refreshToken);
+      Cookies.set("expiration", data.token.expiration);
+
+      onRrefreshed(data.token.accessToken);
+      isRefreshing = false;
+
+      token = data.token.accessToken;
+    } catch (err) {
+      isRefreshing = false;
+      throw err;
+    }
+  } else if (isTokenExpired() && isRefreshing) {
+    await new Promise((resolve) => {
+      //@ts-ignore
+      subscribeTokenRefresh(newToken => {
+        token = newToken;
+        //@ts-ignore
+        resolve();
+      });
+    });
+  }
+
+  if (token) {
+    headers.set("Authorization", `Bearer ${token}`);
+  }
+
+  return headers;
     },
   }),
   tagTypes: ['Category', 'Product'],
