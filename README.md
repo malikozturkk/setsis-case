@@ -18,4 +18,4 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-Live : https://setsis-case.vercel.app/
+Live : https://setsis-case.vercel.app/ (There is a problem in the VM; please test locally. 😔)
