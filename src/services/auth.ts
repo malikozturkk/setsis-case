@@ -14,6 +14,7 @@ export const logIn = async ({ usernameOrEmail, password}: LogInParams) => {
           }); 
           
          const res = await response.json()
+         console.log(res, 'result auth')
          return res.data
     } catch (error) {
       return error;

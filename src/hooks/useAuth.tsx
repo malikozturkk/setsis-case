@@ -13,6 +13,7 @@ const useAuth = () => {
   const loginUser = async (loginData: LoginPayload) => {
     try {
       const result = await logIn(loginData).unwrap();
+      console.log(result, "result useAuth");
       return result;
     } catch (error) {
       console.error("Login Error:", error);
