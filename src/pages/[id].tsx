@@ -5,11 +5,37 @@ import {
   useGetAllCategoriesQuery,
 } from "@/store/apiSlice";
 import Skeleton from "react-loading-skeleton";
-import { Button } from "@mui/material";
-import { NavigateNext, NavigateBefore } from "@mui/icons-material";
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Typography,
+} from "@mui/material";
+import {
+  NavigateNext,
+  NavigateBefore,
+  SentimentVeryDissatisfied,
+} from "@mui/icons-material";
 import { useForm } from "react-hook-form";
 import ProductCard from "@/components/ProductCard";
 import CustomDialog from "@/components/CustomDialog";
+import cookies from "next-cookies";
+import { GetServerSideProps } from "next";
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const allCookies = cookies(context);
+  const user = allCookies.accessToken;
+  if (!user) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+  return { props: {} };
+};
 
 export default function CategoryPage() {
   const [page, setPage] = React.useState<number>(1);
@@ -28,10 +54,10 @@ export default function CategoryPage() {
 
   const {
     data: getByCategoryId,
-    isLoading,
     isError,
+    isLoading,
     //@ts-ignore
-  } = useGetByCategoryIdQuery(page, id);
+  } = useGetByCategoryIdQuery({ pageNumber: page, CategoryId: id });
 
   const {
     data: allCategories,
@@ -62,22 +88,57 @@ export default function CategoryPage() {
   ) : (
     <div className="px-6 max-w-container mx-auto w-full my-12">
       <div className="flex items-center flex-wrap justify-center gap-12">
-        {isLoading
-          ? Array(4)
-              .fill(null)
-              .map((_, index) => (
-                <Skeleton key={index} width={280} height={240} />
-              ))
-          : getByCategoryId?.products.map((product: any) => (
-              <ProductCard
-                key={product.id}
-                allCategories={allCategories}
-                data={product}
-                formMethods={formMethods}
-                edit={edit}
-                setEdit={setEdit}
+        {isLoading ? (
+          Array(4)
+            .fill(null)
+            .map((_, index) => (
+              <Skeleton key={index} width={280} height={240} />
+            ))
+        ) : getByCategoryId?.products?.length < 1 ? (
+          <Card sx={{ maxWidth: 400 }}>
+            <CardMedia title="green iguana" className="flex justify-center">
+              <SentimentVeryDissatisfied
+                width={200}
+                height={200}
+                style={{ width: "200px", height: "200px", fill: "#d32f2f" }}
               />
-            ))}
+            </CardMedia>
+            <CardContent>
+              <Typography
+                gutterBottom
+                variant="h5"
+                component="div"
+                className="text-mui-red font-bold"
+              >
+                Üzgünüz...
+              </Typography>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                className="text-lg"
+              >
+                Bu Kategoriye Ait Herhangi Bir Ürün Bulunamadı. Ürünler
+                Sayfasından Ekleyebilirsiniz.
+              </Typography>
+            </CardContent>
+            <CardActions>
+              <Button size="small" href="/products">
+                Ürünler
+              </Button>
+            </CardActions>
+          </Card>
+        ) : (
+          getByCategoryId?.products.map((product: any) => (
+            <ProductCard
+              key={product.id}
+              allCategories={allCategories}
+              data={product}
+              formMethods={formMethods}
+              edit={edit}
+              setEdit={setEdit}
+            />
+          ))
+        )}
       </div>
       <div className="flex justify-center items-center mt-12 gap-5">
         {isLoading ? (

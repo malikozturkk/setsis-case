@@ -57,7 +57,6 @@ export const apiSlice = createApi({
     try {
       const response = await API.post("/Auth/RefreshTokenLogin", { refreshToken });
       const data = response;
-      console.log(data, 'data al sana');
 
       Cookies.set("accessToken", data.token.accessToken);
       Cookies.set("refreshToken", data.token.refreshToken);
@@ -148,7 +147,7 @@ export const apiSlice = createApi({
     invalidatesTags: [{ type: 'Product', id: 'LIST' }],
 }),
 getByCategoryId: builder.query({
-  query: (pageNumber: number = 1, CategoryId: number = 326) => `/Product/GetByCategoryId?PageNumber=${pageNumber}&CategoryId=${CategoryId}`,
+  query: (params) => `/Product/GetByCategoryId?PageNumber=${params.pageNumber}&CategoryId=${params.CategoryId}`,
   providesTags: (result, error, arg) => [{ type: 'Product', id: 'LIST' }],
 }),
   }),
