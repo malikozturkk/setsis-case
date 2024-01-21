@@ -49,10 +49,6 @@ export default function CategoryPage() {
 
   const disabled = getByCategoryId?.products?.length === 0;
 
-  if (isLoading) {
-    return <div>Yükleniyor...</div>;
-  }
-
   return isError ? (
     <CustomDialog
       open={true}
@@ -67,7 +63,7 @@ export default function CategoryPage() {
     <div className="px-6 max-w-container mx-auto w-full my-12">
       <div className="flex items-center flex-wrap justify-center gap-12">
         {isLoading
-          ? Array(5)
+          ? Array(4)
               .fill(null)
               .map((_, index) => (
                 <Skeleton key={index} width={280} height={240} />
