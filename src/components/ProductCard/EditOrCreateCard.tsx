@@ -102,36 +102,39 @@ const EditOrCreateCard = ({
           </FormControl>
         )}
       />
-      <Controller
-        name="createCategoryId"
-        control={control}
-        render={({ field }) => (
-          <FormControl variant="outlined">
-            <Autocomplete
-              disablePortal
-              id="combo-box-category"
-              options={categories}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Kategori Seçiniz"
-                  {...field}
-                  error={errors?.createCategoryId ? true : false}
-                  color="success"
-                  {...register("createCategoryId", {
-                    required: true,
-                  })}
-                  id="outlined-basic"
-                  variant="outlined"
-                />
+
+      {!edit && (
+        <Controller
+          name="createCategoryId"
+          control={control}
+          render={({ field }) => (
+            <FormControl variant="outlined">
+              <Autocomplete
+                disablePortal
+                id="combo-box-category"
+                options={categories}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Kategori Seçiniz"
+                    {...field}
+                    error={errors?.createCategoryId ? true : false}
+                    color="success"
+                    {...register("createCategoryId", {
+                      required: true,
+                    })}
+                    id="outlined-basic"
+                    variant="outlined"
+                  />
+                )}
+              />
+              {errors.createCategoryId && (
+                <ErrorText message="Kategori Seçimi Zorunlu" />
               )}
-            />
-            {errors.createCategoryId && (
-              <ErrorText message="Kategori Seçimi Zorunlu" />
-            )}
-          </FormControl>
-        )}
-      />
+            </FormControl>
+          )}
+        />
+      )}
 
       <Controller
         name="createPrice"
